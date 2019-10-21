@@ -1,21 +1,93 @@
-body{
+body {
     background-color: black;
+    color: white;
 }
 
-
-#blockImg{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+#block {
+    position: relative;
 }
-#txtCenterImg{
+
+#block[img] {
+    text-align: center;
+    margin-top: 500px;
+}
+
+#blockImg {
+    position: absolute;
+    left: 50%;
+    margin-left: -500px;
+}
+
+#txtCenterImg {
     position: absolute;
     opacity: 0.7;
-    top: 30%;
+    top: 158px;
     left: 50%;
+    margin-left: -15px;
     transform: translate(-50%, -50%);
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     color: cornsilk;
     font-size: 100px;
+}
+
+.cells {
+    position: absolute;
+    left: 50%;
+    opacity: 0.5;
+    font-size: 12px;
+    width: 74px;
+    height: 76px;
+}
+
+.cells:hover {
+    opacity: 0.8;
+}
+
+#cell-1, #cell-3, #cell-5, #cell-7, #cell-9, #cell-11, #cell-13, #cell-15, #cell-17, #cell-19 {
+    margin-top: 20px;
+}
+
+#cell-2, #cell-4, #cell-6, #cell-8, #cell-10, #cell-12, #cell-14, #cell-16, #cell-18, #cell-20 {
+    margin-top: 218px;
+}
+
+#cell-1, #cell-2 {
+    margin-left: -478px;
+}
+
+#cell-3, #cell-4 {
+    margin-left: -380px;
+}
+
+#cell-5, #cell-6 {
+    margin-left: -282px;
+}
+
+#cell-7, #cell-8 {
+    margin-left: -184px;
+}
+
+#cell-9, #cell-10 {
+    margin-left: -86px;
+}
+
+#cell-11, #cell-12 {
+    margin-left: 12px;
+}
+
+#cell-13, #cell-14 {
+    margin-left: 110px;
+}
+
+#cell-15, #cell-16 {
+    margin-left: 208px;
+}
+
+#cell-17, #cell-18 {
+    margin-left: 306px;
+}
+
+#cell-19, #cell-20 {
+    margin-left: 404px;
 }
