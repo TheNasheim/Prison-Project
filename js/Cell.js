@@ -25,17 +25,21 @@ class Cell extends Domer {
             this._bInmate = false;
         }
     }
+
     getIsInmate(){
         return this._bInmate;
     }
+
     getCellNr(){
         return this._cellNr;
     }
+
     getInmate(){
         return this._Inmate;
     }
+    
     onSelectInmate() {
-        this._blockObject.relayInfoToApp(this);
+        this._blockObject.relayCellInfoToApp(this);
     }
 
     render(html) {

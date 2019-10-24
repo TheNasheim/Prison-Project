@@ -3,6 +3,7 @@ class Block extends Domer {
     _blockName = '';
     _appObject = null;
     _selectedCell;
+    _workers = [];
 
     constructor(blockName, appObject) {
         super();
@@ -15,7 +16,6 @@ class Block extends Domer {
         for (let i = 1; i < 21; i++) {
             this._cells.push(new Cell(i, this._blockName, this));
         }
-
     }
 
     getBlockName() {
@@ -24,6 +24,16 @@ class Block extends Domer {
 
     getCells() {
         return this._cells;
+    }
+
+    addWorker(firstname, lastname, title) {
+        if (this._workers.length < 5) {
+            this._workers.push(new Worker(firstname, lastname, title, this._workers.length, this));
+            this._appObject.changeLastEvent("Worker was added");
+        }
+        else {
+            this._appObject.changeLastEvent("Worker was not added. Too many workers. max 4/Block");
+        }
     }
 
     addInmate(inmate, cell) {
@@ -36,12 +46,42 @@ class Block extends Domer {
     }
 
     delInmate(selCell) {
-        let index = this._cells.findIndex(x => x._cellNr == selCell._cellNr);
+        let index = this._cells.findIndex(x => x.getCellNr() == selCell.getCellNr());
         this._cells[index] = new Cell(index + 1, this._blockName, this);
     }
 
-    relayInfoToApp(e) {
+    delWorker(selWorker) {
+        let index = this._workers.findIndex(x => x.getFirstName() == selWorker.getFirstName());
+        //this._workers[index] = null;
+        this._workers.splice(index, 1);
+        for(let i = 0;i < this._workers.length; i++){
+            this._workers[i].setBlockPosition(i);
+        }
+        return;
+    }
+
+    relayCellInfoToApp(e) {
         this._appObject.infoFromCell(e);
+    }
+
+    relayWorkerInfoToApp(e) {
+        //console.log(e);
+        this._appObject.infoFromWorker(e);
+    }
+
+    displayWorkers() {
+        let strOut = "There are no workers at this block.";
+        if (this._workers.length > 0) {
+            strOut = "";
+            for (let i = 0; i < this._workers.length; i++) {
+                console.log(this._workers[i]);
+                strOut += `<div id="worker-${i}" class="workers" >${this._workers[i].getFirstName()}<br>${this._workers[i].getLastName()}<p>${this._workers[i].getWorkerTitle()}</p></div>`;
+            }
+            return strOut;
+        }
+        else {
+            return strOut;
+        }
     }
 
     render(html) {
@@ -50,8 +90,11 @@ class Block extends Domer {
         <img src="/Image/Block.jpg" alt=${this._blockName} id="blockImg">
         <div id="txtCenterImg">${this._blockName}</div>
         ${this._cells}
+        <div id="workers">
+        ${this._workers}
+        
+        </div>
         </section>
         `
     }
-
 }

@@ -8,14 +8,71 @@ body {
     text-align: center;
 }
 
+button {
+    font-size: 18px;
+    border-radius: 12px;
+}
+
+button:hover {
+    background-color: #aaaaaa; 
+    color: white;
+  }
+
+#btnChange{
+    position: relative;
+    left: 30px;
+    top: -185px;
+}
+
+#btnChange2{
+    position: relative;
+    left: 30px;
+    top: -185px;
+}
+
+#btnAdd{
+    position: relative;
+    left: -137px;
+    top: -135px;
+}
+
+#btnMove{
+    position: relative;
+    left: -276px;
+    top: -100px;
+}
+#btnRemove{
+    position: relative;
+    left: -413px;
+    top: -65px;
+}
+#btnReset{
+    position: relative;
+    left: -525px;
+    top: -30px;
+}
+
 option{
     width:100px; 
 }
+
+#selBlocks{
+    position: relative;
+    left: 0px;
+}
+
+#selCells{
+    position: relative;
+    left: 10px;
+}
+
+
 #fillPrison {
     position: absolute;
     left: 0px;
     top: 0px;
 }
+
 #block {
     position: relative;
 }
@@ -43,6 +100,7 @@ option{
     color: cornsilk;
     font-size: 100px;
 }
+
 
 .blockCells {
     position: absolute;
@@ -113,4 +171,29 @@ option{
 
 #cell-19, #cell-20 {
     margin-left: 404px;
+}
+
+.workers {
+    position: absolute;
+    left: 50%;
+    opacity: 1;
+    font-size: 12px;
+    width: 74px;
+    height: 76px;
+    margin-top: 320px;
+    background-color: #222;
+    
+}
+
+#worker-0 {
+    margin-left: -480px;
+}
+#worker-1 {
+    margin-left: -381px;
+}
+#worker-2 {
+    margin-left: -283px;
+}
+#worker-3 {
+    margin-left: -185px;
 }

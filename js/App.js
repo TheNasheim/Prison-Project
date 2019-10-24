@@ -35,22 +35,26 @@ class App extends Domer {
         this._Blocks = [];
         this._Blocks.push(new Block("A1", this));
         this._Blocks.push(new Block("B1", this));
-        this._Blocks[0].addInmate(new Inmate("Reid", "Voit", "215-268", "3.4 Months"), 1);
-        this._Blocks[0].addInmate(new Inmate("Edgar", "Saleem", "215-268", "2 Years"), 2);
+        this._Blocks[0].addInmate(new Inmate("Helena", "Barmer", "215-268", "3.4 Months"), 1);
+        this._Blocks[0].addInmate(new Inmate("Johan", "Wikström", "215-268", "2 Years"), 2);
         this._Blocks[0].addInmate(new Inmate("Tim", "Leanos", "215-268", "5 Month"), 7);
-        this._Blocks[0].addInmate(new Inmate("Jerome", "Creek", "896-156", "2 Months"), 10);
+        this._Blocks[0].addInmate(new Inmate("Sebastian", "Lundgren", "896-156", "2 Months"), 10);
         this._Blocks[0].addInmate(new Inmate("Gerry", "Fuselier", "535-864", "1.7 Years"), 15);
         this._Blocks[0].addInmate(new Inmate("Brenton", "Marti", "321-108", "4 Months"), 18);
-        this._Blocks[0].addInmate(new Inmate("Geoffrey", "Rouleau", "386-354", "7 Months"), 20);
-
+        this._Blocks[0].addInmate(new Inmate("Nils", "Jacobsen", "386-354", "7 Months"), 20);
+        this._Blocks[0].addWorker("Johan", "Wirén", "Correctional Officer");
+        this._Blocks[0].addWorker("Lars", "Something", "Warden");
+        
+        
         this._Blocks[1].addInmate(new Inmate("Bradford", "Glatt", "215-268", "2.4 Months"), 2);
         this._Blocks[1].addInmate(new Inmate("Hector", "Romberg", "215-268", "6 Years"), 4);
-        this._Blocks[1].addInmate(new Inmate("Ricardo", "Bou", "215-268", "4.7 Month"), 5);
+        this._Blocks[1].addInmate(new Inmate("Mantas", "Sliazas", "215-268", "4.7 Month"), 5);
         this._Blocks[1].addInmate(new Inmate("Jeremy", "Tuff", "896-156", "2 Months"), 9);
-        this._Blocks[1].addInmate(new Inmate("Alvaro", "Halbert", "535-864", "1.6 Years"), 12);
+        this._Blocks[1].addInmate(new Inmate("Erik", "Halbert", "535-864", "1.6 Years"), 12);
         this._Blocks[1].addInmate(new Inmate("Darrick", "Towle", "321-108", "12 Months"), 17);
-        this._Blocks[1].addInmate(new Inmate("Damien", "Linscott", "386-354", "9 Months"), 19);
-        this._Blocks[1].addInmate(new Inmate("Efrain", "Elizalde", "386-354", "6 Months"), 20);
+        this._Blocks[1].addInmate(new Inmate("Tobbe", "Linscott", "386-354", "9 Months"), 19);
+        this._Blocks[1].addInmate(new Inmate("Hassan", "Abed", "386-354", "1.6 Months"), 20);
+        this._Blocks[1].addWorker("Christian", "Nilsson", "Correctional Officer");
         this._lastEvent = "Prison Filled";
     }
 
@@ -89,29 +93,65 @@ class App extends Domer {
     }
 
     infoFromCell(cell) {
-        if (this.isInputsFilled() && cell.getIsInmate()) {
-            console.log(cell.getIsInmate());
-            this._selectedFullCell = true;
-        } else if (cell.getIsInmate() && !this._selectedFullCell) {
-            let inmate = cell.getInmate();
-            this._showName = inmate.getFirstName();
-            this._showLastName = inmate.getLastName();
-            this._showNumber = inmate.getIDNr();
-            this._showTime = inmate.getSentence();
-            this._selectedSavedCell = cell;
-            this._selectedFullCell = true;
-            this._lastEvent = "Inmate selected";
-        } else {
-            this._selectedCell = cell.getCellNr();
-            this._lastEvent = "Empty cell selected";
+        if (this._state == APP_STATE_INMATE) {
+            if (this.isInputsFilled() && cell.getIsInmate()) {
+                console.log(cell.getIsInmate());
+                this._selectedFullCell = true;
+            } else if (cell.getIsInmate() && !this._selectedFullCell) {
+                let inmate = cell.getInmate();
+                this._showName = inmate.getFirstName();
+                this._showLastName = inmate.getLastName();
+                this._showNumber = inmate.getIDNr();
+                this._showTime = inmate.getSentence();
+                this._selectedSavedCell = cell;
+                this._selectedFullCell = true;
+                this._lastEvent = "Inmate selected";
+            } else {
+                this._selectedCell = cell.getCellNr();
+                this._lastEvent = "Empty cell selected";
+            }
         }
         //console.log(cell._cellNr)
     }
 
+    infoFromWorker(worker) {
+        if (this._state == APP_STATE_WORKER) {
+            if (this.isInputsFilled() && cell.getIsInmate()) {
+                console.log(cell.getIsInmate());
+                this._selectedFullCell = true;
+            } else if (!this._selectedFullCell) {
+                this._showName = worker.getFirstName();
+                this._showLastName = worker.getLastName();
+                this._showNumber = worker.getWorkerTitle();
+                this._selectedSavedCell = worker;
+                this._selectedFullCell = true;
+                this._lastEvent = "Worker selected";
+            } else {
+
+            }
+        }
+    }
+
+    onChangeState(){
+        if(this._state == APP_STATE_INMATE){
+            this._state = APP_STATE_WORKER;
+        }
+        else {
+            this._state = APP_STATE_INMATE;
+        }
+    }
+
     onAddInmate() {
         if (this.isInputsFilled()) {
-            this._Blocks[this._selectedBlock].addInmate(new Inmate(this._showName, this._showLastName, this._showNumber), this._selectedCell)
+            this._Blocks[this._selectedBlock].addInmate(new Inmate(this._showName, this._showLastName, this._showNumber), this._selectedCell);
             this._lastEvent = "Inmate was added";
+        }
+    }
+
+    onAddWorker() {
+        if (this.isInputsFilled()) {
+            console.log(this._showName, this._showLastName, this._showNumber);
+            this._Blocks[this._selectedBlock].addWorker(this._showName, this._showLastName, this._showNumber);
         }
     }
 
@@ -124,11 +164,26 @@ class App extends Domer {
         this._lastEvent = "Inmate was moved";
     }
 
+    onMoveWorker() {        
+        let index = this._Blocks.findIndex(x => x.getBlockName() == this._selectedSavedCell._blockObject.getBlockName());
+        this._Blocks[index].delWorker(this._selectedSavedCell);
+        this._Blocks[this._selectedBlock].addWorker(this._selectedSavedCell.getFirstName(), this._selectedSavedCell.getLastName(), this._selectedSavedCell.getWorkerTitle())
+        this.onEmptyMoveForm();
+        this._lastEvent = "Worker was moved";
+    }
+
     onRemoveInmate() {
         let index = this._Blocks.findIndex(x => x._blockName == this._selectedSavedCell._blockName);
         this._Blocks[index].delInmate(this._selectedSavedCell);
         this.onEmptyMoveForm();
         this._lastEvent = "Inmate was removed";
+    }
+
+    onRemoveWorker() {
+        let index = this._Blocks.findIndex(x => x.getBlockName() == this._selectedSavedCell._blockObject.getBlockName());
+        this._Blocks[index].delWorker(this._selectedSavedCell);
+        this.onEmptyMoveForm();
+        this._lastEvent = "Worker was removed";
     }
 
     onSelectCell() {
@@ -161,7 +216,7 @@ class App extends Domer {
     }
 
     isInputsFilled() {
-        if (this._showName == "" || this._showLastName == "" || this._showTime == "" || this._showNumber == "") {
+        if (this._showName == "" || this._showLastName == "" || this._showNumber == "") {
             return false;
         }
         else {
@@ -182,55 +237,75 @@ class App extends Domer {
         else
             return "";
     }
+    
 
-    test(){
-        console.log("yepp")
+    changeLastEvent(textIn) {
+        this._lastEvent = textIn;
     }
+
     inputReadonly() {
         if (this._selectedFullCell)
             return "readonly";
         else
             return "";
     }
-    
-        displayOptions() {
-            if (this._state == APP_STATE_INMATE) {
-                return `
-        <input placeholder="FirstName" type="text" id="inputName" bind="_showName" ${this.inputReadonly()}><br>
-        <input placeholder="LastName" type="text" id="lastName" bind="_showLastName" ${this.inputReadonly()}><br>
+
+    displayOptions() {
+        if (this._state == APP_STATE_INMATE) {
+            return `
+        <input placeholder="First Name" type="text" id="inputName" bind="_showName" ${this.inputReadonly()}><br>
+        <input placeholder="Last Name" type="text" id="lastName" bind="_showLastName" ${this.inputReadonly()}><br>
         <input placeholder="Inmate Number" type="text" id="number" bind="_showNumber" ${this.inputReadonly()}><br>
         <input placeholder="Sentenced Time" type="text" id="time" bind="_showTime" keydown="test"><br>
 
-        <label for="myBlocks">Blocks</label>   <label for="myCells">Cells</label><br>
-        <select id="myBlocks" size="8" bind="_selectedBlock" >${this._showBlocks}</select>
-        <select id="myCells" size="8" bind="_selectedCell" change="onSelectCell" >${this._showCells}</select><br>
-        <button type="button" click="onAddInmate" ${this.btnAddInmate()}>Add new Inmate</button>
-        <button type="button" click="onMoveInmate" ${this.btnChangeInmate()}>Move Inmate</button>
-        <button type="button" click="onResetForm">Cancel</button><br>
-        <button type="button" click="onRemoveInmate" ${this.btnChangeInmate()}>Remove Inmate</button>
+        <label for="selBlocks">Blocks</label>   <label for="myCells">Cells</label><br>
+        <select id="selBlocks" size="8" bind="_selectedBlock" >${this._showBlocks}</select>
+        <select id="selCells" size="8" bind="_selectedCell" change="onSelectCell" >${this._showCells}</select><br>
+        <button type="button" id="btnChange" click="onChangeState">Change to Workers</button>
+        <button type="button" id="btnAdd" click="onAddInmate" ${this.btnAddInmate()}>Add new Inmate</button>
+        <button type="button" id="btnMove" click="onMoveInmate" ${this.btnChangeInmate()}>Move Inmate</button>
+        <button type="button" id="btnRemove" click="onRemoveInmate" ${this.btnChangeInmate()}>Remove Inmate</button>
+        <button type="button" id="btnReset" click="onResetForm">Cancel</button><br>
         <br>
-        ${this._lastEvent}
-    </form>
             `
-            }
         }
+        else if (this._state == APP_STATE_WORKER) {
+            return `
+            <input placeholder="First Name" type="text" id="inputName" bind="_showName" ${this.inputReadonly()}><br>
+            <input placeholder="Last Name" type="text" id="lastName" bind="_showLastName" ${this.inputReadonly()}><br>
+            <input placeholder="Job Description" type="text" id="number" bind="_showNumber" ${this.inputReadonly()}><br><br>
 
-    //${this.displayOptions()} 
+            <label for="selBlocks">Blocks</label><br>
+            <select id="selBlocks" size="8" bind="_selectedBlock" >${this._showBlocks}</select><br>
+            <button type="button" id="btnChange2" click="onChangeState" >Change to Inmates</button>
+            <button type="button" id="btnAdd" click="onAddWorker" ${this.btnAddInmate()}>Add new Worker</button>
+            <button type="button" id="btnMove" click="onMoveWorker" ${this.btnChangeInmate()}>Move Worker</button>
+            <button type="button" id="btnRemove" click="onRemoveWorker" ${this.btnChangeInmate()}>Remove Worker</button>
+            <button type="button" id="btnReset" click="onResetForm">Cancel</button><br>
+
+                `
+        }
+    }
+
     render(html) {
         return html` 
     <section>
     <button id="fillPrison" type="button" click="onFillPrison">Fill Prison</button>
+    
+    
     <form class="form">
     <h2>Welcome to Prison Project 0.8</h2>
     ${this.displayOptions()} 
+    ${this._lastEvent}
     </form>
     <hr>
     <br>
         ${this.selectedBlock()}
+        <br>
+        <br>
+        <br>
     </section>
     `
     }
 }
 new App();
-
-

@@ -4,8 +4,6 @@ class Inmate extends Person {
 
     constructor(firstName, lastName, idNr, time) {
         super(firstName, lastName);
-        //this._firstName = firstName
-        //this._lastName = lastName
         this._idNr = idNr;
         this._sentence = time;
     }
@@ -13,12 +11,15 @@ class Inmate extends Person {
     getFirstName(){
         return this._firstName;
     }
+
     getLastName(){
         return this._lastName;
     }
+
     getIDNr(){
         return this._idNr;
     }
+
     getSentence(){
         return this._sentence;
     }
