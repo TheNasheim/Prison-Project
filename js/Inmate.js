@@ -1,8 +1,8 @@
-class Inmate extends Person{
+class Inmate extends Person {
     _idNr = ''
     _sentence = ''
 
-    constructor(firstName, lastName, idNr, time){
+    constructor(firstName, lastName, idNr, time) {
         super(firstName, lastName);
         //this._firstName = firstName
         //this._lastName = lastName
@@ -10,13 +10,27 @@ class Inmate extends Person{
         this._sentence = time;
     }
 
+    getFirstName(){
+        return this._firstName;
+    }
+    getLastName(){
+        return this._lastName;
+    }
+    getIDNr(){
+        return this._idNr;
+    }
+    getSentence(){
+        return this._sentence;
+    }
 
-    render(html){
+    render(html) {
         return html`
-            ${this._firstName}<br>
-            ${this._lastName}<br>
-            ${this._idNr}<br>
-            ${this._sentence}<br>    
+            <div>
+                ${this._firstName}<br>
+                ${this._lastName}<br>
+                ${this._idNr}<br>
+                ${this._sentence}<br>
+            </div>    
         `
     }
 }

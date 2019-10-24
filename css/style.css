@@ -3,6 +3,19 @@ body {
     color: white;
 }
 
+.form{
+    position: relative;
+    text-align: center;
+}
+
+option{
+    width:100px; 
+}
+#fillPrison {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
 #block {
     position: relative;
 }
@@ -29,6 +42,16 @@ body {
     font-weight: bold;
     color: cornsilk;
     font-size: 100px;
+}
+
+.blockCells {
+    position: absolute;
+    z-index: 100;
+    left: 50%;
+    opacity: 1;
+    font-size: 12px;
+    width: 74px;
+    height: 76px;
 }
 
 .cells {
