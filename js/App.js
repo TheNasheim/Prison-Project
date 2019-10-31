@@ -3,7 +3,7 @@ const APP_STATE_WORKER = 2;
 
 class App extends Domer {
     _Blocks = [];
-    _selectedBlock = '';
+    _selectedBlock = '0';
     _selectedCell = '';
     _selectedFullCell = false;
     _selectedSavedCell;
@@ -29,6 +29,7 @@ class App extends Domer {
         this.showOptions();
         //this.onFillPrison();
         this._lastEvent = "Prison Initialized";
+        this.selectedBlock();
     }
 
     onFillPrison() {
@@ -44,8 +45,7 @@ class App extends Domer {
         this._Blocks[0].addInmate(new Inmate("Nils", "Jacobsen", "386-354", "7 Months"), 20);
         this._Blocks[0].addWorker("Johan", "Wirén", "Correctional Officer");
         this._Blocks[0].addWorker("Lars", "Something", "Warden");
-        
-        
+
         this._Blocks[1].addInmate(new Inmate("Bradford", "Glatt", "215-268", "2.4 Months"), 2);
         this._Blocks[1].addInmate(new Inmate("Hector", "Romberg", "215-268", "6 Years"), 4);
         this._Blocks[1].addInmate(new Inmate("Mantas", "Sliazas", "215-268", "4.7 Month"), 5);
@@ -111,7 +111,6 @@ class App extends Domer {
                 this._lastEvent = "Empty cell selected";
             }
         }
-        //console.log(cell._cellNr)
     }
 
     infoFromWorker(worker) {
@@ -132,18 +131,20 @@ class App extends Domer {
         }
     }
 
-    onChangeState(){
-        if(this._state == APP_STATE_INMATE){
+    onChangeState() {
+        if (this._state == APP_STATE_INMATE) {
             this._state = APP_STATE_WORKER;
         }
         else {
             this._state = APP_STATE_INMATE;
         }
+        
     }
 
     onAddInmate() {
         if (this.isInputsFilled()) {
             this._Blocks[this._selectedBlock].addInmate(new Inmate(this._showName, this._showLastName, this._showNumber), this._selectedCell);
+            this.onEmptyInmateForm();
             this._lastEvent = "Inmate was added";
         }
     }
@@ -152,6 +153,7 @@ class App extends Domer {
         if (this.isInputsFilled()) {
             console.log(this._showName, this._showLastName, this._showNumber);
             this._Blocks[this._selectedBlock].addWorker(this._showName, this._showLastName, this._showNumber);
+            this.onEmptyWorkerForm();
         }
     }
 
@@ -164,25 +166,25 @@ class App extends Domer {
         this._lastEvent = "Inmate was moved";
     }
 
-    onMoveWorker() {        
+    onMoveWorker() {
         let index = this._Blocks.findIndex(x => x.getBlockName() == this._selectedSavedCell._blockObject.getBlockName());
         this._Blocks[index].delWorker(this._selectedSavedCell);
         this._Blocks[this._selectedBlock].addWorker(this._selectedSavedCell.getFirstName(), this._selectedSavedCell.getLastName(), this._selectedSavedCell.getWorkerTitle())
-        this.onEmptyMoveForm();
+        this.onEmptyWorkerForm();
         this._lastEvent = "Worker was moved";
     }
 
     onRemoveInmate() {
         let index = this._Blocks.findIndex(x => x._blockName == this._selectedSavedCell._blockName);
         this._Blocks[index].delInmate(this._selectedSavedCell);
-        this.onEmptyMoveForm();
+        this.onEmptyInmateForm();
         this._lastEvent = "Inmate was removed";
     }
 
     onRemoveWorker() {
         let index = this._Blocks.findIndex(x => x.getBlockName() == this._selectedSavedCell._blockObject.getBlockName());
         this._Blocks[index].delWorker(this._selectedSavedCell);
-        this.onEmptyMoveForm();
+        this.onEmptyWorkerForm();
         this._lastEvent = "Worker was removed";
     }
 
@@ -201,8 +203,15 @@ class App extends Domer {
         this._lastEvent = "Form Emptyed";
     }
 
+    onEmptyWorkerForm() {
+        this._selectedSavedCell = null;
+        this._selectedFullCell = false;
+        this._showLastName = "";
+        this._showName = "";
+        this._showNumber = "";
+    }
 
-    onResetForm() {
+    onEmptyInmateForm() {
         this._selectedSavedCell = null;
         this._selectedFullCell = false;
         this._showLastName = "";
@@ -210,9 +219,7 @@ class App extends Domer {
         this._showNumber = "";
         this._showTime = "";
         this._selectedCell = "";
-        this._selectedBlock = "";
         this._showCells = "";
-        this._lastEvent = "Form Cleared";
     }
 
     isInputsFilled() {
@@ -231,16 +238,15 @@ class App extends Domer {
             return "";
     }
 
+    changeLastEvent(textIn) {
+        this._lastEvent = textIn;
+    }
+
     btnChangeInmate() {
         if (!this._selectedFullCell)
             return "disabled";
         else
             return "";
-    }
-    
-
-    changeLastEvent(textIn) {
-        this._lastEvent = textIn;
     }
 
     inputReadonly() {
@@ -261,11 +267,12 @@ class App extends Domer {
         <label for="selBlocks">Blocks</label>   <label for="myCells">Cells</label><br>
         <select id="selBlocks" size="8" bind="_selectedBlock" >${this._showBlocks}</select>
         <select id="selCells" size="8" bind="_selectedCell" change="onSelectCell" >${this._showCells}</select><br>
+
         <button type="button" id="btnChange" click="onChangeState">Change to Workers</button>
         <button type="button" id="btnAdd" click="onAddInmate" ${this.btnAddInmate()}>Add new Inmate</button>
         <button type="button" id="btnMove" click="onMoveInmate" ${this.btnChangeInmate()}>Move Inmate</button>
         <button type="button" id="btnRemove" click="onRemoveInmate" ${this.btnChangeInmate()}>Remove Inmate</button>
-        <button type="button" id="btnReset" click="onResetForm">Cancel</button><br>
+        <button type="button" id="btnReset" click="onEmptyInmateForm">Cancel</button><br>
         <br>
             `
         }
@@ -281,8 +288,7 @@ class App extends Domer {
             <button type="button" id="btnAdd" click="onAddWorker" ${this.btnAddInmate()}>Add new Worker</button>
             <button type="button" id="btnMove" click="onMoveWorker" ${this.btnChangeInmate()}>Move Worker</button>
             <button type="button" id="btnRemove" click="onRemoveWorker" ${this.btnChangeInmate()}>Remove Worker</button>
-            <button type="button" id="btnReset" click="onResetForm">Cancel</button><br>
-
+            <button type="button" id="btnReset" click="onEmptyWorkerForm">Cancel</button><br>
                 `
         }
     }
@@ -290,16 +296,14 @@ class App extends Domer {
     render(html) {
         return html` 
     <section>
-    <button id="fillPrison" type="button" click="onFillPrison">Fill Prison</button>
-    
-    
-    <form class="form">
-    <h2>Welcome to Prison Project 0.8</h2>
-    ${this.displayOptions()} 
-    ${this._lastEvent}
-    </form>
-    <hr>
-    <br>
+        <button id="fillPrison" type="button" click="onFillPrison">Fill Prison</button>
+        <form class="form">
+            <h2>Welcome to Prison Project 1.0</h2>
+            ${this.displayOptions()} 
+            ${this._lastEvent}
+        </form>
+        <hr>
+        <br>
         ${this.selectedBlock()}
         <br>
         <br>

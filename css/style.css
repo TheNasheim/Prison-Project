@@ -1,8 +1,13 @@
+*{
+    box-sizing: border-box;
+}
+
 body {
     background-color: black;
     color: white;
+    display: flex;
+    flex-direction: column;
 }
-
 .form{
     position: relative;
     text-align: center;
@@ -119,6 +124,7 @@ option{
     font-size: 12px;
     width: 74px;
     height: 76px;
+    padding: 5px;
 }
 
 .cells:hover {
@@ -182,7 +188,7 @@ option{
     height: 76px;
     margin-top: 320px;
     background-color: #222;
-    
+    padding: 5px;
 }
 
 #worker-0 {

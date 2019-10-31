@@ -27,11 +27,12 @@ class Block extends Domer {
     }
 
     addWorker(firstname, lastname, title) {
-        if (this._workers.length < 5) {
+        if (this._workers.length < 4) {
             this._workers.push(new Worker(firstname, lastname, title, this._workers.length, this));
             this._appObject.changeLastEvent("Worker was added");
         }
         else {
+            console.log("hello wtf");
             this._appObject.changeLastEvent("Worker was not added. Too many workers. max 4/Block");
         }
     }
@@ -65,7 +66,6 @@ class Block extends Domer {
     }
 
     relayWorkerInfoToApp(e) {
-        //console.log(e);
         this._appObject.infoFromWorker(e);
     }
 
