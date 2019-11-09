@@ -7,5 +7,11 @@ class Person extends Domer {
         this._firstName = firstName;
         this._lastName = lastName;
     }
+    getFirstName() {
+        return this._firstName;
+    }
 
+    getLastName() {
+        return this._lastName;
+    }
 }

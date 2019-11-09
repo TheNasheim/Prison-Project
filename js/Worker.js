@@ -12,14 +12,6 @@ class Worker extends Person {
         this._blockObject = blockObject;
     }
 
-    getFirstName() {
-        return this._firstName;
-    }
-
-    getLastName() {
-        return this._lastName;
-    }
-
     getWorkerTitle() {
         return this._workerTitle;
     }

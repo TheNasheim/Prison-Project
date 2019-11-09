@@ -8,14 +8,6 @@ class Inmate extends Person {
         this._sentence = time;
     }
 
-    getFirstName(){
-        return this._firstName;
-    }
-
-    getLastName(){
-        return this._lastName;
-    }
-
     getIDNr(){
         return this._idNr;
     }
